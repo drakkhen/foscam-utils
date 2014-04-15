@@ -44,11 +44,6 @@ class FoscamIRService:
 
         self.get_elevation(lat, lng)
 
-        self.observer = ephem.Observer()
-        self.observer.lat = str(lat)  # these MUST be a Strings!
-        self.observer.long = str(lng)
-        self.observer.elevation = self.elevation
-
         print "-" * 70
         print "IP Address:  %s" % self.external_ip
         print "Location:    (%f, %f) [%s, %s]" % (lat, lng, city, state)
@@ -75,11 +70,16 @@ class FoscamIRService:
         self.elevation = data['results'][0]['elevation']
 
     def is_nighttime(self):
-        sun = ephem.Sun()
-        sun.compute(self.observer)
+        observer = ephem.Observer()
+        observer.lat = str(self.geoip.location.latitude)  # these MUST be a Strings!
+        observer.long = str(self.geoip.location.longitude)
+        observer.elevation = self.elevation
 
-        nextrise = self.observer.next_rising(sun).datetime()
-        nextset = self.observer.next_setting(sun).datetime()
+        sun = ephem.Sun()
+        sun.compute(observer)
+
+        nextrise = observer.next_rising(sun).datetime()
+        nextset = observer.next_setting(sun).datetime()
 
         it_is_night = nextrise < nextset
 
