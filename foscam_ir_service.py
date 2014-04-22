@@ -19,6 +19,7 @@ import json
 import os.path
 import time
 import urllib
+import sys
 
 import geoip2.database  # from MaxMind
 import ephem            # from pip
@@ -51,6 +52,7 @@ class FoscamIRService:
         print "Location:    (%f, %f) [%s, %s]" % (lat, lng, city, state)
         print "Elevation:   %d meters" % self.elevation
         print "-" * 70
+        sys.stdout.flush()
 
     def get_external_ip(self):
         conn = httplib.HTTPConnection('ifconfig.me', 80)
@@ -102,6 +104,7 @@ class FoscamIRService:
                     print "The sun just came up!"
                 print "The sun sets in %s at %s local time" % (format_timedelta(sets_in), local_sets_at)
 
+            sys.stdout.flush()
             self.it_was_night = it_is_night
 
         return it_is_night
