@@ -115,6 +115,6 @@ class FoscamIRService:
             time.sleep(60)
 
 if __name__ == "__main__":
-    geoip_data = os.path.expanduser('~/data/MaxMind/GeoLite2-City.mmdb')
+    geoip_data = os.path.expanduser('/usr/local/lib/MaxMind/GeoLite2-City.mmdb')
     service = FoscamIRService(geolite2_city_path=geoip_data)
     service.loop()
