@@ -44,6 +44,8 @@ class FoscamIRService:
 
         self.get_elevation(lat, lng)
 
+        self.it_was_night = None
+
         print "-" * 70
         print "IP Address:  %s" % self.external_ip
         print "Location:    (%f, %f) [%s, %s]" % (lat, lng, city, state)
@@ -83,17 +85,24 @@ class FoscamIRService:
 
         it_is_night = nextrise < nextset
 
-        fmt = '%H:%M:%S'
+        if it_is_night != self.it_was_night:
+            # printing some helpful output
+            fmt = '%H:%M:%S'
 
-        # printing some helpful output
-        if it_is_night:
-            rises_in = nextrise - datetime.datetime.utcnow()
-            local_rises_at = (datetime.datetime.now() + rises_in).strftime(fmt)
-            print "The sun rises in %s at %s local time" % (format_timedelta(rises_in), local_rises_at)
-        else:
-            sets_in = nextset - datetime.datetime.utcnow()
-            local_sets_at = (datetime.datetime.now() + sets_in).strftime(fmt)
-            print "The sun sets in %s at %s local time" % (format_timedelta(sets_in), local_sets_at)
+            if it_is_night:
+                rises_in = nextrise - datetime.datetime.utcnow()
+                local_rises_at = (datetime.datetime.now() + rises_in).strftime(fmt)
+                if self.it_was_night != None:
+                    print "The sun just set!"
+                print "The sun rises in %s at %s local time" % (format_timedelta(rises_in), local_rises_at)
+            else:
+                sets_in = nextset - datetime.datetime.utcnow()
+                local_sets_at = (datetime.datetime.now() + sets_in).strftime(fmt)
+                if self.it_was_night != None:
+                    print "The sun just came up!"
+                print "The sun sets in %s at %s local time" % (format_timedelta(sets_in), local_sets_at)
+
+            self.it_was_night = it_is_night
 
         return it_is_night
 
