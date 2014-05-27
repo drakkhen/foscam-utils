@@ -115,7 +115,7 @@ class FoscamIRService:
     def loop(self):
         while True:
             self.foscam.nightvision(self.is_nighttime())
-            time.sleep(60)
+            time.sleep(60 * 15)
 
 if __name__ == "__main__":
     geoip_data = os.path.expanduser('/usr/local/lib/MaxMind/GeoLite2-City.mmdb')
