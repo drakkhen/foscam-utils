@@ -73,6 +73,9 @@ class FoscamIRService:
         data = json.loads(resp.read())
         self.elevation = data['results'][0]['elevation']
 
+    def now(self):
+        str(datetime.datetime.now()).split('.')[0]
+
     def is_nighttime(self):
         observer = ephem.Observer()
         observer.lat = str(self.geoip.location.latitude)  # these MUST be a Strings!
@@ -95,14 +98,14 @@ class FoscamIRService:
                 rises_in = nextrise - datetime.datetime.utcnow()
                 local_rises_at = (datetime.datetime.now() + rises_in).strftime(fmt)
                 if self.it_was_night != None:
-                    print "The sun just set!"
-                print "The sun rises in %s at %s local time" % (format_timedelta(rises_in), local_rises_at)
+                    print "%s - The sun just set!" % self.now()
+                print "%s - The sun rises in %s at %s local time" % (self.now(), format_timedelta(rises_in), local_rises_at)
             else:
                 sets_in = nextset - datetime.datetime.utcnow()
                 local_sets_at = (datetime.datetime.now() + sets_in).strftime(fmt)
                 if self.it_was_night != None:
-                    print "The sun just came up!"
-                print "The sun sets in %s at %s local time" % (format_timedelta(sets_in), local_sets_at)
+                    print "%s - The sun just came up!" % self.now()
+                print "%s - The sun sets in %s at %s local time" % (self.now(), format_timedelta(sets_in), local_sets_at)
 
             sys.stdout.flush()
             self.it_was_night = it_is_night
