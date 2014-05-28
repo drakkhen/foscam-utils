@@ -74,7 +74,7 @@ class FoscamIRService:
         self.elevation = data['results'][0]['elevation']
 
     def now(self):
-        str(datetime.datetime.now()).split('.')[0]
+        return str(datetime.datetime.now()).split('.')[0]
 
     def is_nighttime(self):
         observer = ephem.Observer()
